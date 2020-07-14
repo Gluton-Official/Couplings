@@ -82,7 +82,7 @@ public final class Couplings {
   }
 
   public static boolean isUsable(final CollisionView world, final BlockPos pos, final PlayerEntity player) {
-    return player.canModifyWorld() && world.getWorldBorder().contains(pos);
+    return player.canModifyBlocks() && world.getWorldBorder().contains(pos);
   }
 
   public static boolean use(final BlockState other, final World world, final Hand hand, final PlayerEntity player, final BlockHitResult origin, final BlockPos offset, final ActionResult originResult) {

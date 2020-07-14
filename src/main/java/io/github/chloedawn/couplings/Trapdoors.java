@@ -48,7 +48,7 @@ public final class Trapdoors {
         pos.offset(facing.rotateYClockwise(), Couplings.getCouplingRange())
       )) {
         if (pos.equals(offset)) {
-          ((BlockPos.Mutable) offset).setOffset(facing);
+          ((BlockPos.Mutable) offset).move(facing);
           if (Couplings.isUsable(world, offset, player)) {
             final BlockState mirror = world.getBlockState(offset);
             if (block == mirror.getBlock() && equals(open, half, opposite, mirror)) {
@@ -58,7 +58,7 @@ public final class Trapdoors {
               }
             }
           }
-          ((BlockPos.Mutable) offset).setOffset(opposite);
+          ((BlockPos.Mutable) offset).move(opposite);
         } else if (Couplings.isUsable(world, offset, player)) {
           final BlockState other = world.getBlockState(offset);
           if (block == other.getBlock() && equals(open, half, facing, other)) {
@@ -66,7 +66,7 @@ public final class Trapdoors {
               USE_NEIGHBORS.set(true);
               return;
             }
-            ((BlockPos.Mutable) offset).setOffset(facing);
+            ((BlockPos.Mutable) offset).move(facing);
             if (Couplings.isUsable(world, offset, player)) {
               final BlockState mirror = world.getBlockState(offset);
               if (block == mirror.getBlock() && equals(open, half, opposite, mirror)) {
@@ -76,7 +76,7 @@ public final class Trapdoors {
                 }
               }
             }
-            ((BlockPos.Mutable) offset).setOffset(opposite);
+            ((BlockPos.Mutable) offset).move(opposite);
           }
         }
       }
