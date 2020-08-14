@@ -42,7 +42,7 @@ abstract class DoorMixin {
   }
 
   @Inject(method = "setOpen", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/DoorBlock;playOpenCloseSound(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Z)V", shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-  private void toggled(final World world, final BlockPos pos, final boolean open, final CallbackInfo ci, final BlockState state) {
+  private void toggled(final World world, final BlockState state, final BlockPos pos, final boolean open, final CallbackInfo ci) {
     Doors.toggled(state, world, pos, open);
   }
 

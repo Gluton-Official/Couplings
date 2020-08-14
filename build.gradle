@@ -22,9 +22,9 @@ minecraft {
 }
 
 dependencies {
-  minecraft "com.mojang:minecraft:1.16.1"
-  mappings "net.fabricmc:yarn:1.16.1+build.21:v2"
-  modImplementation "net.fabricmc:fabric-loader:0.8.9+build.203"
+  minecraft "com.mojang:minecraft:1.16.2"
+  mappings "net.fabricmc:yarn:1.16.2+build.6:v2"
+  modImplementation "net.fabricmc:fabric-loader:0.9.1+build.205"
   implementation "org.jetbrains:annotations:$annotations"
   implementation "org.checkerframework:checker-qual:$checker"
 }
