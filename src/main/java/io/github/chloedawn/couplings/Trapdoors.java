@@ -36,36 +36,19 @@ public final class Trapdoors {
   }
 
   public static void used(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockHitResult hit, final ActionResult usageResult) {
-    if (usageResult.isAccepted() && Couplings.areTrapdoorsEnabled() && USE_NEIGHBORS.get() && (!player.isSneaking() || Couplings.isSneakingIgnored())) {
-      USE_NEIGHBORS.set(false);
-      final Block block = state.getBlock();
-      final boolean open = state.get(TrapdoorBlock.OPEN);
-      final BlockHalf half = state.get(TrapdoorBlock.HALF);
-      final Direction facing = state.get(HorizontalFacingBlock.FACING);
-      final Direction opposite = facing.getOpposite();
-      for (final BlockPos offset : BlockPos.iterate(
-        pos.offset(facing.rotateYCounterclockwise(), Couplings.getCouplingRange()),
-        pos.offset(facing.rotateYClockwise(), Couplings.getCouplingRange())
-      )) {
-        if (pos.equals(offset)) {
-          ((BlockPos.Mutable) offset).move(facing);
-          if (Couplings.isUsable(world, offset, player)) {
-            final BlockState mirror = world.getBlockState(offset);
-            if (block == mirror.getBlock() && equals(open, half, opposite, mirror)) {
-              if (Couplings.use(mirror, world, hand, player, hit, offset.toImmutable(), usageResult)) {
-                USE_NEIGHBORS.set(true);
-                return;
-              }
-            }
-          }
-          ((BlockPos.Mutable) offset).move(opposite);
-        } else if (Couplings.isUsable(world, offset, player)) {
-          final BlockState other = world.getBlockState(offset);
-          if (block == other.getBlock() && equals(open, half, facing, other)) {
-            if (Couplings.use(other, world, hand, player, hit, offset.toImmutable(), usageResult)) {
-              USE_NEIGHBORS.set(true);
-              return;
-            }
+    if (!Couplings.keyBinding.isPressed()) {
+      if (usageResult.isAccepted() && Couplings.areTrapdoorsEnabled() && USE_NEIGHBORS.get() && (!player.isSneaking() || Couplings.isSneakingIgnored())) {
+        USE_NEIGHBORS.set(false);
+        final Block block = state.getBlock();
+        final boolean open = state.get(TrapdoorBlock.OPEN);
+        final BlockHalf half = state.get(TrapdoorBlock.HALF);
+        final Direction facing = state.get(HorizontalFacingBlock.FACING);
+        final Direction opposite = facing.getOpposite();
+        for (final BlockPos offset : BlockPos.iterate(
+            pos.offset(facing.rotateYCounterclockwise(), Couplings.getCouplingRange()),
+            pos.offset(facing.rotateYClockwise(), Couplings.getCouplingRange())
+        )) {
+          if (pos.equals(offset)) {
             ((BlockPos.Mutable) offset).move(facing);
             if (Couplings.isUsable(world, offset, player)) {
               final BlockState mirror = world.getBlockState(offset);
@@ -77,10 +60,29 @@ public final class Trapdoors {
               }
             }
             ((BlockPos.Mutable) offset).move(opposite);
+          } else if (Couplings.isUsable(world, offset, player)) {
+            final BlockState other = world.getBlockState(offset);
+            if (block == other.getBlock() && equals(open, half, facing, other)) {
+              if (Couplings.use(other, world, hand, player, hit, offset.toImmutable(), usageResult)) {
+                USE_NEIGHBORS.set(true);
+                return;
+              }
+              ((BlockPos.Mutable) offset).move(facing);
+              if (Couplings.isUsable(world, offset, player)) {
+                final BlockState mirror = world.getBlockState(offset);
+                if (block == mirror.getBlock() && equals(open, half, opposite, mirror)) {
+                  if (Couplings.use(mirror, world, hand, player, hit, offset.toImmutable(), usageResult)) {
+                    USE_NEIGHBORS.set(true);
+                    return;
+                  }
+                }
+              }
+              ((BlockPos.Mutable) offset).move(opposite);
+            }
           }
         }
+        USE_NEIGHBORS.set(true);
       }
-      USE_NEIGHBORS.set(true);
     }
   }
 

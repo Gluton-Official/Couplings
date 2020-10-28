@@ -34,27 +34,29 @@ public final class FenceGates {
   }
 
   public static void used(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockHitResult hit, final ActionResult usageResult) {
-    if (usageResult.isAccepted() && Couplings.areFenceGatesEnabled() && USE_NEIGHBORS.get() && (!player.isSneaking() || Couplings.isSneakingIgnored())) {
-      USE_NEIGHBORS.set(false);
-      final Block block = state.getBlock();
-      final boolean open = state.get(FenceGateBlock.OPEN);
-      final Axis axis = state.get(FenceGateBlock.FACING).getAxis();
-      for (final BlockPos offset : BlockPos.iterate(
-        pos.down(Couplings.getCouplingRange()),
-        pos.up(Couplings.getCouplingRange())
-      )) {
-        if (Couplings.isUsable(world, offset, player)) {
-          final BlockState other = world.getBlockState(offset);
+    if (!Couplings.keyBinding.isPressed()) {
+      if (usageResult.isAccepted() && Couplings.areFenceGatesEnabled() && USE_NEIGHBORS.get() && (!player.isSneaking() || Couplings.isSneakingIgnored())) {
+        USE_NEIGHBORS.set(false);
+        final Block block = state.getBlock();
+        final boolean open = state.get(FenceGateBlock.OPEN);
+        final Axis axis = state.get(FenceGateBlock.FACING).getAxis();
+        for (final BlockPos offset : BlockPos.iterate(
+            pos.down(Couplings.getCouplingRange()),
+            pos.up(Couplings.getCouplingRange())
+        )) {
+          if (Couplings.isUsable(world, offset, player)) {
+            final BlockState other = world.getBlockState(offset);
 
-          if (block == other.getBlock() && equals(open, axis, other)) {
-            if (Couplings.use(other, world, hand, player, hit, offset, usageResult)) {
-              USE_NEIGHBORS.set(true);
-              return;
+            if (block == other.getBlock() && equals(open, axis, other)) {
+              if (Couplings.use(other, world, hand, player, hit, offset, usageResult)) {
+                USE_NEIGHBORS.set(true);
+                return;
+              }
             }
           }
         }
+        USE_NEIGHBORS.set(true);
       }
-      USE_NEIGHBORS.set(true);
     }
   }
 

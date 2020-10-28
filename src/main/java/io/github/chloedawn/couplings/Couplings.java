@@ -16,12 +16,15 @@
 
 package io.github.chloedawn.couplings;
 
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -32,6 +35,7 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.lwjgl.glfw.GLFW;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -49,11 +53,19 @@ public final class Couplings {
 
   private static Options options = new Options();
   private static boolean loaded = false;
+  public static KeyBinding keyBinding;
 
   private Couplings() {
   }
 
   public static void load() {
+    keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        "key.couplings.activate", // The translation key of the keybinding's name
+        InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
+        GLFW.GLFW_KEY_R, // The keycode of the key
+        "couplings.couplings.general" // The translation key of the keybinding's category.
+    ));
+
     if (loaded) {
       throw new IllegalStateException();
     }
