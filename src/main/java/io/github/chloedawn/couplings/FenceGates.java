@@ -34,7 +34,6 @@ public final class FenceGates {
   }
 
   public static void used(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockHitResult hit, final ActionResult usageResult) {
-    if (!Couplings.keyBinding.isPressed()) {
       if (usageResult.isAccepted() && Couplings.areFenceGatesEnabled() && USE_NEIGHBORS.get() && (!player.isSneaking() || Couplings.isSneakingIgnored())) {
         USE_NEIGHBORS.set(false);
         final Block block = state.getBlock();
@@ -57,7 +56,6 @@ public final class FenceGates {
         }
         USE_NEIGHBORS.set(true);
       }
-    }
   }
 
   private static boolean equals(final boolean open, final Axis axis, final BlockState state) {

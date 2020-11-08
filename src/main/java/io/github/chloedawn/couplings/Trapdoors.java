@@ -36,7 +36,6 @@ public final class Trapdoors {
   }
 
   public static void used(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockHitResult hit, final ActionResult usageResult) {
-    if (!Couplings.keyBinding.isPressed()) {
       if (usageResult.isAccepted() && Couplings.areTrapdoorsEnabled() && USE_NEIGHBORS.get() && (!player.isSneaking() || Couplings.isSneakingIgnored())) {
         USE_NEIGHBORS.set(false);
         final Block block = state.getBlock();
@@ -83,7 +82,6 @@ public final class Trapdoors {
         }
         USE_NEIGHBORS.set(true);
       }
-    }
   }
 
   private static boolean equals(final boolean open, final BlockHalf half, final Direction facing, final BlockState state) {

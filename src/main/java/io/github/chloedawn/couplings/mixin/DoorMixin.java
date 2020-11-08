@@ -39,22 +39,16 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 abstract class DoorMixin {
   @Inject(method = "onUse", at = @At(value = "RETURN", ordinal = 1), allow = 1)
   private void used(final BlockState state, final World world, final BlockPos pos, final PlayerEntity player, final Hand hand, final BlockHitResult hit, final CallbackInfoReturnable<ActionResult> cir) {
-    if (!Couplings.keyBinding.isPressed()) {
       Doors.used(state, world, pos, player, hand, hit, cir.getReturnValue());
-    }
   }
 
   @Inject(method = "setOpen", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/DoorBlock;playOpenCloseSound(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Z)V", shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
   private void toggled(final World world, final BlockState state, final BlockPos pos, final boolean open, final CallbackInfo ci) {
-    if (!Couplings.keyBinding.isPressed()) {
       Doors.toggled(state, world, pos, open);
-    }
   }
 
   @Inject(method = "neighborUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z", shift = Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
   private void neighborUpdated(final BlockState state, final World world, final BlockPos pos, final Block block, final BlockPos neighborPos, final boolean moved, final CallbackInfo ci, final boolean powered) {
-    if (!Couplings.keyBinding.isPressed()) {
       Doors.neighborUpdated(state, world, pos, powered);
-    }
   }
 }
